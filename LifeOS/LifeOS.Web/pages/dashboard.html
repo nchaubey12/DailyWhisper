@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - LifeOS</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/themes.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">LifeOS</div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item" data-page="dashboard.html">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="notes.html" class="nav-item" data-page="notes.html">
+                    <span class="nav-icon">📝</span>
+                    <span>Notes</span>
+                </a>
+                <a href="goals.html" class="nav-item" data-page="goals.html">
+                    <span class="nav-icon">🎯</span>
+                    <span>Goals</span>
+                </a>
+                <a href="deadlines.html" class="nav-item" data-page="deadlines.html">
+                    <span class="nav-icon">⏰</span>
+                    <span>Deadlines</span>
+                </a>
+                <a href="routines.html" class="nav-item" data-page="routines.html">
+                    <span class="nav-icon">🔁</span>
+                    <span>Routines</span>
+                </a>
+                <a href="thoughts.html" class="nav-item" data-page="thoughts.html">
+                    <span class="nav-icon">💭</span>
+                    <span>Thoughts</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Sidebar Overlay (mobile) -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menuToggle">☰</button>
+                <h1 class="page-title">Dashboard</h1>
+            </div>
+            <div class="topbar-right">
+                <button class="topbar-icon" id="themeToggle">🌙</button>
+                <div class="user-menu" id="logoutBtn">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <span class="user-name" id="userName">User</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="grid grid-3" id="dashboardGrid">
+                <!-- Summary cards will be loaded here -->
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="../js/dashboard.js"></script>
+</body>
+</html>
