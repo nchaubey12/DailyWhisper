@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes - LifeOS</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/themes.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">LifeOS</div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item" data-page="dashboard.html">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="notes.html" class="nav-item" data-page="notes.html">
+                    <span class="nav-icon">📝</span>
+                    <span>Notes</span>
+                </a>
+                <a href="goals.html" class="nav-item" data-page="goals.html">
+                    <span class="nav-icon">🎯</span>
+                    <span>Goals</span>
+                </a>
+                <a href="deadlines.html" class="nav-item" data-page="deadlines.html">
+                    <span class="nav-icon">⏰</span>
+                    <span>Deadlines</span>
+                </a>
+                <a href="routines.html" class="nav-item" data-page="routines.html">
+                    <span class="nav-icon">🔁</span>
+                    <span>Routines</span>
+                </a>
+                <a href="thoughts.html" class="nav-item" data-page="thoughts.html">
+                    <span class="nav-icon">💭</span>
+                    <span>Thoughts</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Sidebar Overlay (mobile) -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menuToggle">☰</button>
+                <h1 class="page-title">Notes</h1>
+            </div>
+            <div class="topbar-right">
+                <button class="topbar-icon" id="themeToggle">🌙</button>
+                <div class="user-menu" id="logoutBtn">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <span class="user-name" id="userName">User</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div style="flex: 1; max-width: 400px;">
+                    <input type="text" id="searchInput" placeholder="Search notes..." class="form-input">
+                </div>
+                <button class="btn btn-primary" id="newNoteBtn">
+                    <span>➕</span>
+                    <span>New Note</span>
+                </button>
+            </div>
+
+            <div id="notesGrid" class="grid grid-3">
+                <!-- Notes will be loaded here -->
+            </div>
+
+            <div id="emptyState" class="empty-state hidden">
+                <div class="empty-state-icon">📝</div>
+                <div class="empty-state-title">No notes yet</div>
+                <div class="empty-state-text">Create your first note to get started!</div>
+                <button class="btn btn-primary" onclick="document.getElementById('newNoteBtn').click()">
+                    Create Note
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Note Modal -->
+    <div class="modal-overlay" id="noteModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">New Note</h2>
+                <button class="modal-close">✕</button>
+            </div>
+            <form id="noteForm">
+                <input type="hidden" id="noteId">
+                
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input type="text" id="noteTitle" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Content</label>
+                    <textarea id="noteContent" class="form-textarea" rows="8"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tags (comma separated)</label>
+                    <input type="text" id="noteTags" class="form-input" placeholder="work, personal, ideas">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Color</label>
+                    <div class="color-picker">
+                        <div class="color-option" style="background: #fef3c7" data-color="#fef3c7"></div>
+                        <div class="color-option" style="background: #d1fae5" data-color="#d1fae5"></div>
+                        <div class="color-option" style="background: #dbeafe" data-color="#dbeafe"></div>
+                        <div class="color-option" style="background: #fce7f3" data-color="#fce7f3"></div>
+                        <div class="color-option" style="background: #e9d5ff" data-color="#e9d5ff"></div>
+                        <div class="color-option" style="background: #fed7aa" data-color="#fed7aa"></div>
+                    </div>
+                    <input type="hidden" id="noteColor" value="#fef3c7">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modal-close">Cancel</button>
+                    <button type="button" class="btn btn-danger hidden" id="deleteNoteBtn">Delete</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="../js/notes.js"></script>
+</body>
+</html>

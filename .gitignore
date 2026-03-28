@@ -1,0 +1,85 @@
+# =========================
+# Build results
+# =========================
+bin/
+obj/
+out/
+publish/
+
+# =========================
+# Visual Studio / Rider / VS Code
+# =========================
+.vs/
+.idea/
+.vscode/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# =========================
+# Logs & temp files
+# =========================
+*.log
+*.tmp
+*.temp
+
+# =========================
+# NuGet
+# =========================
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+# Keep packages.config if used
+!packages.config
+
+# =========================
+# Build / Test results
+# =========================
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# =========================
+# OS generated files
+# =========================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# =========================
+# Environment / secrets
+# =========================
+.env
+.env.*
+appsettings.Development.json
+secrets.json
+
+# =========================
+# ASP.NET Core
+# =========================
+wwwroot/lib/
+wwwroot/dist/
+
+# =========================
+# Rider / ReSharper
+# =========================
+_ReSharper*/
+*.DotSettings.user
+
+# =========================
+# Azure / Publish
+# =========================
+*.PublishSettings
+*.azurePubxml
+
+# =========================
+# Others
+# =========================
+*.cache
+*.pid
