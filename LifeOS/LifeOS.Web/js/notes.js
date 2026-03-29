@@ -42,7 +42,7 @@ function renderNotes(notesToRender = notes) {
 
     grid.innerHTML = notesToRender.map(note => `
         <div class="note-card ${note.isPinned ? 'pinned' : ''}" 
-             style="color: ${note.color}" 
+             style="background-color: ${note.color}; border-left: 4px solid ${getDarkerShade(note.color)};" 
              data-id="${note.id}">
             <div class="card-header">
                 <h3 style="color: var(--text-primary); margin: 0; font-size: 1.125rem;">
@@ -86,6 +86,18 @@ function renderNotes(notesToRender = notes) {
             await togglePin(noteId);
         });
     });
+}
+
+function getDarkerShade(color) {
+    // Simple function to darken a hex color
+    const hex = color.replace('#', '');
+    const r = parseInt(hex.substr(0, 2), 16);
+    const g = parseInt(hex.substr(2, 2), 16);
+    const b = parseInt(hex.substr(4, 2), 16);
+    
+    const darker = (val) => Math.max(0, Math.floor(val * 0.7));
+    
+    return `#${darker(r).toString(16).padStart(2, '0')}${darker(g).toString(16).padStart(2, '0')}${darker(b).toString(16).padStart(2, '0')}`;
 }
 
 function initEventListeners() {

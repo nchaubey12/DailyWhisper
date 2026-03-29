@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Goals - LifeOS</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/themes.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">LifeOS</div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item" data-page="dashboard.html">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="notes.html" class="nav-item" data-page="notes.html">
+                    <span class="nav-icon">📝</span>
+                    <span>Notes</span>
+                </a>
+                <a href="goals.html" class="nav-item" data-page="goals.html">
+                    <span class="nav-icon">🎯</span>
+                    <span>Goals</span>
+                </a>
+                <a href="deadlines.html" class="nav-item" data-page="deadlines.html">
+                    <span class="nav-icon">⏰</span>
+                    <span>Deadlines</span>
+                </a>
+                <a href="routines.html" class="nav-item" data-page="routines.html">
+                    <span class="nav-icon">🔁</span>
+                    <span>Routines</span>
+                </a>
+                <a href="thoughts.html" class="nav-item" data-page="thoughts.html">
+                    <span class="nav-icon">💭</span>
+                    <span>Thoughts</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Sidebar Overlay (mobile) -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menuToggle">☰</button>
+                <h1 class="page-title">Goals</h1>
+            </div>
+            <div class="topbar-right">
+                <button class="topbar-icon" id="themeToggle">🌙</button>
+                <div class="user-menu" id="logoutBtn">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <span class="user-name" id="userName">User</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <select id="statusFilter" class="form-select" style="width: auto;">
+                        <option value="">All Status</option>
+                        <option value="NotStarted">Not Started</option>
+                        <option value="InProgress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                    <select id="priorityFilter" class="form-select" style="width: auto;">
+                        <option value="">All Priority</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" id="newGoalBtn">
+                    <span>➕</span>
+                    <span>New Goal</span>
+                </button>
+            </div>
+
+            <div id="goalsContainer" class="grid grid-2">
+                <!-- Goals will be loaded here -->
+            </div>
+
+            <div id="emptyState" class="empty-state hidden">
+                <div class="empty-state-icon">🎯</div>
+                <div class="empty-state-title">No goals yet</div>
+                <div class="empty-state-text">Set your first goal and start achieving!</div>
+                <button class="btn btn-primary" onclick="document.getElementById('newGoalBtn').click()">
+                    Create Goal
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Goal Modal -->
+    <div class="modal-overlay" id="goalModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">New Goal</h2>
+                <button class="modal-close">✕</button>
+            </div>
+            <form id="goalForm">
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input type="text" id="goalTitle" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea id="goalDescription" class="form-textarea" rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <input type="text" id="goalCategory" class="form-input" value="General">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Priority</label>
+                    <select id="goalPriority" class="form-select">
+                        <option value="Low">Low</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select id="goalStatus" class="form-select">
+                        <option value="NotStarted" selected>Not Started</option>
+                        <option value="InProgress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Progress (%)</label>
+                    <input type="range" id="goalProgress" min="0" max="100" value="0" 
+                           style="width: 100%;" oninput="document.getElementById('progressValue').textContent = this.value + '%'">
+                    <div style="text-align: center; margin-top: 0.5rem; font-weight: 600;" id="progressValue">0%</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Target Date</label>
+                    <input type="date" id="goalTargetDate" class="form-input">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modal-close">Cancel</button>
+                    <button type="button" class="btn btn-danger hidden" id="deleteGoalBtn">Delete</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="../js/goals.js"></script>
+</body>
+</html>
