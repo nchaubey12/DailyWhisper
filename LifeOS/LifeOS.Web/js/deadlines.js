@@ -7,20 +7,89 @@ initUI();
 
 let deadlines = [];
 let currentDeadlineId = null;
+let currentDate = new Date();
 
 document.addEventListener('DOMContentLoaded', () => {
     loadDeadlines();
     initEventListeners();
+    renderCalendar();
 });
 
 async function loadDeadlines() {
     try {
         deadlines = await api.get('/deadlines');
         renderDeadlines(deadlines);
+        renderCalendar();
     } catch (error) {
         console.error('Failed to load deadlines:', error);
         showToast('Failed to load deadlines', 'error');
     }
+}
+
+function renderCalendar() {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    
+    // Update header
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                       'July', 'August', 'September', 'October', 'November', 'December'];
+    document.getElementById('currentMonth').textContent = `${monthNames[month]} ${year}`;
+    
+    // Get calendar data
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const startDay = firstDay.getDay();
+    const daysInMonth = lastDay.getDate();
+    
+    const calendarGrid = document.getElementById('calendarGrid');
+    
+    // Day headers
+    const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    let html = dayHeaders.map(day => 
+        `<div class="calendar-day-header">${day}</div>`
+    ).join('');
+    
+    // Previous month days
+    const prevMonthDays = new Date(year, month, 0).getDate();
+    for (let i = startDay - 1; i >= 0; i--) {
+        html += `<div class="calendar-day other-month">${prevMonthDays - i}</div>`;
+    }
+    
+    // Current month days
+    const today = new Date();
+    for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month, day);
+        const dateStr = date.toISOString().split('T')[0];
+        const dayDeadlines = deadlines.filter(d => d.dueDate.startsWith(dateStr));
+        
+        const isToday = date.toDateString() === today.toDateString();
+        const hasDeadlines = dayDeadlines.length > 0;
+        
+        html += `
+            <div class="calendar-day ${isToday ? 'today' : ''} ${hasDeadlines ? 'has-deadline' : ''}"
+                 data-date="${dateStr}">
+                ${day}
+                ${hasDeadlines ? `<div class="deadline-count">${dayDeadlines.length}</div>` : ''}
+            </div>
+        `;
+    }
+    
+    // Next month days
+    const remainingDays = 42 - (startDay + daysInMonth);
+    for (let day = 1; day <= remainingDays; day++) {
+        html += `<div class="calendar-day other-month">${day}</div>`;
+    }
+    
+    calendarGrid.innerHTML = html;
+    
+    // Add click handlers
+    document.querySelectorAll('.calendar-day[data-date]').forEach(day => {
+        day.addEventListener('click', () => {
+            const date = day.dataset.date;
+            document.getElementById('deadlineDueDate').value = date;
+            openModal('deadlineModal');
+        });
+    });
 }
 
 function renderDeadlines(deadlinesToRender = deadlines) {
@@ -101,6 +170,17 @@ function groupDeadlinesByDate(deadlines) {
 }
 
 function initEventListeners() {
+    // Calendar navigation
+    document.getElementById('prevMonth')?.addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar();
+    });
+    
+    document.getElementById('nextMonth')?.addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar();
+    });
+
     document.getElementById('newDeadlineBtn')?.addEventListener('click', () => {
         currentDeadlineId = null;
         resetForm();

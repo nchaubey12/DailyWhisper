@@ -50,6 +50,77 @@
     --note-orange: #7c2d12;
 }
 
+/* Pastel Theme */
+[data-theme="pastel"] {
+    --bg-primary: #fef6fb;
+    --bg-secondary: #fce8f3;
+    --bg-tertiary: #f9d5e5;
+    --text-primary: #4a2c3e;
+    --text-secondary: #7d5a6f;
+    --text-tertiary: #b39dab;
+    --border-color: #f0d9e7;
+    --primary-color: #d4a5c8;
+    --primary-hover: #c98dbc;
+    --success-color: #a8d5ba;
+    --warning-color: #f7d794;
+    --danger-color: #f8a5c2;
+    --gradient-start: #e8b4d4;
+    --gradient-end: #d4a5f8;
+    
+    /* Note colors - pastel versions */
+    --note-yellow: #fff9e6;
+    --note-green: #e8f5e9;
+    --note-blue: #e3f2fd;
+    --note-pink: #fce4ec;
+    --note-purple: #f3e5f5;
+    --note-orange: #fff3e0;
+}
+
+/* Animated Theme (with gradients and animations) */
+[data-theme="animated"] {
+    --bg-primary: #1a1a2e;
+    --bg-secondary: #16213e;
+    --bg-tertiary: #0f3460;
+    --text-primary: #eee;
+    --text-secondary: #cbd5e1;
+    --text-tertiary: #94a3b8;
+    --border-color: #0f3460;
+    --primary-color: #e94560;
+    --primary-hover: #f56476;
+    --success-color: #00d4aa;
+    --warning-color: #ffa41b;
+    --danger-color: #e94560;
+    --gradient-start: #667eea;
+    --gradient-end: #764ba2;
+    
+    --note-yellow: #3d3522;
+    --note-green: #1f3a2e;
+    --note-blue: #1e3a5f;
+    --note-pink: #3d2235;
+    --note-purple: #2d2245;
+    --note-orange: #3d2a1f;
+}
+
+[data-theme="animated"] .card {
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+    animation: gradientShift 10s ease infinite;
+}
+
+[data-theme="animated"] .btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% { filter: hue-rotate(0deg); }
+    50% { filter: hue-rotate(10deg); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
 body {
     background-color: var(--bg-primary);
     color: var(--text-primary);

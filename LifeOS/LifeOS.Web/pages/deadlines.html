@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deadlines - LifeOS</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/themes.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <style>
+        .calendar {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+        .calendar-day-header {
+            text-align: center;
+            font-weight: 600;
+            padding: 0.5rem;
+            color: var(--text-secondary);
+        }
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem;
+            border-radius: 8px;
+            background: var(--bg-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .calendar-day:hover {
+            background: var(--bg-tertiary);
+        }
+        .calendar-day.has-deadline {
+            background: var(--primary-color);
+            color: white;
+        }
+        .calendar-day.today {
+            border: 2px solid var(--primary-color);
+        }
+        .calendar-day.other-month {
+            opacity: 0.3;
+        }
+        .deadline-count {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">LifeOS</div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item" data-page="dashboard.html">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="notes.html" class="nav-item" data-page="notes.html">
+                    <span class="nav-icon">📝</span>
+                    <span>Notes</span>
+                </a>
+                <a href="goals.html" class="nav-item" data-page="goals.html">
+                    <span class="nav-icon">🎯</span>
+                    <span>Goals</span>
+                </a>
+                <a href="deadlines.html" class="nav-item" data-page="deadlines.html">
+                    <span class="nav-icon">⏰</span>
+                    <span>Deadlines</span>
+                </a>
+                <a href="routines.html" class="nav-item" data-page="routines.html">
+                    <span class="nav-icon">🔁</span>
+                    <span>Routines</span>
+                </a>
+                <a href="thoughts.html" class="nav-item" data-page="thoughts.html">
+                    <span class="nav-icon">💭</span>
+                    <span>Thoughts</span>
+                </a>
+            </nav>
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menuToggle">☰</button>
+                <h1 class="page-title">Deadlines</h1>
+            </div>
+            <div class="topbar-right">
+                <button class="topbar-icon" id="themeToggle">🌙</button>
+                <div class="user-menu" id="logoutBtn">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <span class="user-name" id="userName">User</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Calendar View -->
+            <div class="calendar">
+                <div class="calendar-header">
+                    <button class="btn btn-sm btn-secondary" id="prevMonth">← Prev</button>
+                    <h2 id="currentMonth" style="margin: 0;">January 2026</h2>
+                    <button class="btn btn-sm btn-secondary" id="nextMonth">Next →</button>
+                </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Calendar will be rendered here -->
+                </div>
+            </div>
+
+            <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+                <h2 style="margin: 0;">All Deadlines</h2>
+                <button class="btn btn-primary" id="newDeadlineBtn">
+                    <span>➕</span>
+                    <span>New Deadline</span>
+                </button>
+            </div>
+
+            <div id="deadlinesContainer">
+                <!-- Deadlines will be loaded here -->
+            </div>
+
+            <div id="emptyState" class="empty-state hidden">
+                <div class="empty-state-icon">⏰</div>
+                <div class="empty-state-title">No deadlines yet</div>
+                <div class="empty-state-text">Add your first deadline!</div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Deadline Modal -->
+    <div class="modal-overlay" id="deadlineModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">New Deadline</h2>
+                <button class="modal-close">✕</button>
+            </div>
+            <form id="deadlineForm">
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input type="text" id="deadlineTitle" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea id="deadlineDescription" class="form-textarea" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Due Date</label>
+                    <input type="date" id="deadlineDueDate" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Due Time (Optional)</label>
+                    <input type="time" id="deadlineDueTime" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <input type="text" id="deadlineCategory" class="form-input" value="General">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Priority</label>
+                    <select id="deadlinePriority" class="form-select">
+                        <option value="Low">Low</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" id="deadlineCompleted">
+                        <span>Mark as completed</span>
+                    </label>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modal-close">Cancel</button>
+                    <button type="button" class="btn btn-danger hidden" id="deleteDeadlineBtn">Delete</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="../js/deadlines.js"></script>
+</body>
+</html>

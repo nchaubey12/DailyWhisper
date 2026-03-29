@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Routines - LifeOS</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/themes.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">LifeOS</div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item" data-page="dashboard.html">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="notes.html" class="nav-item" data-page="notes.html">
+                    <span class="nav-icon">📝</span>
+                    <span>Notes</span>
+                </a>
+                <a href="goals.html" class="nav-item" data-page="goals.html">
+                    <span class="nav-icon">🎯</span>
+                    <span>Goals</span>
+                </a>
+                <a href="deadlines.html" class="nav-item" data-page="deadlines.html">
+                    <span class="nav-icon">⏰</span>
+                    <span>Deadlines</span>
+                </a>
+                <a href="routines.html" class="nav-item" data-page="routines.html">
+                    <span class="nav-icon">🔁</span>
+                    <span>Routines</span>
+                </a>
+                <a href="thoughts.html" class="nav-item" data-page="thoughts.html">
+                    <span class="nav-icon">💭</span>
+                    <span>Thoughts</span>
+                </a>
+            </nav>
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menuToggle">☰</button>
+                <h1 class="page-title">Routines</h1>
+            </div>
+            <div class="topbar-right">
+                <button class="topbar-icon" id="themeToggle">🌙</button>
+                <div class="user-menu" id="logoutBtn">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <span class="user-name" id="userName">User</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+                <h2 style="margin: 0;">My Routines</h2>
+                <button class="btn btn-primary" id="newRoutineBtn">
+                    <span>➕</span>
+                    <span>New Routine</span>
+                </button>
+            </div>
+
+            <div id="routinesContainer" class="grid grid-2">
+                <!-- Routines will be loaded here -->
+            </div>
+
+            <div id="emptyState" class="empty-state hidden">
+                <div class="empty-state-icon">🔁</div>
+                <div class="empty-state-title">No routines yet</div>
+                <div class="empty-state-text">Build your first habit!</div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Routine Modal -->
+    <div class="modal-overlay" id="routineModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">New Routine</h2>
+                <button class="modal-close">✕</button>
+            </div>
+            <form id="routineForm">
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input type="text" id="routineTitle" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea id="routineDescription" class="form-textarea" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Frequency</label>
+                    <select id="routineFrequency" class="form-select">
+                        <option value="Daily" selected>Daily</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Custom">Custom</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Time of Day (Optional)</label>
+                    <input type="time" id="routineTime" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" id="routineActive" checked>
+                        <span>Active</span>
+                    </label>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modal-close">Cancel</button>
+                    <button type="button" class="btn btn-danger hidden" id="deleteRoutineBtn">Delete</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="../js/routines.js"></script>
+</body>
+</html>
