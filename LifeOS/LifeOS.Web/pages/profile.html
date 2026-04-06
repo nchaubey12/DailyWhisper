@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - LifeOS</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/themes.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <style>
+        /* ── Theme card grid ──────────────────────────────────── */
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+        @media (max-width: 1100px) { .theme-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (max-width: 640px)  { .theme-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        .theme-card {
+            border-radius: 10px;
+            padding: 0.65rem 0.75rem;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+            min-height: 72px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .theme-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.18); }
+        .theme-card.selected {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.3);
+        }
+        .theme-card-name  { font-size: 0.82rem; font-weight: 700; margin: 0 0 0.15rem; }
+        .theme-card-sub   { font-size: 0.7rem;  opacity: 0.8; margin: 0; }
+        .theme-preview-label {
+            font-size: 0.65rem; text-align: center; margin-top: 0.35rem;
+            opacity: 0.7;
+        }
+
+        /* Individual theme card colours */
+        .tc-light         { background: #f8fafc; color: #0f172a; border-color: #e2e8f0; }
+        .tc-dark          { background: #1e293b; color: #f1f5f9; }
+        .tc-pastel        { background: linear-gradient(135deg,#ffc8dd,#ffafcc); color: #4a1942; }
+        .tc-animated      { background: linear-gradient(135deg,#0a0a2e,#2a2a6e); color: #e0e0ff; }
+        .tc-cute-animals  { background: linear-gradient(135deg,#fff0e0,#ffd6a5); color: #5c3317; }
+        .tc-pastel-flowers{ background: linear-gradient(135deg,#f9f0ff,#d4a8f0); color: #3a1a5c; }
+        .tc-bullet-journal{ background: linear-gradient(135deg,#faf7f2,#ecdcc8); color: #2c1810; }
+        .tc-daily-planner { background: linear-gradient(135deg,#f0f4ff,#c8d4ff); color: #1a2a5c; }
+        .tc-kawaii        { background: linear-gradient(135deg,#fff0f8,#ffc8e8); color: #4a0a2c; }
+        .tc-notebook      { background: linear-gradient(135deg,#fffef0,#fff8c0); color: #1a1a00; }
+        .tc-stickers      { background: linear-gradient(135deg,#f0fff0,#c8ffc8); color: #0a2a0a; }
+        .tc-galaxy        { background: linear-gradient(135deg,#0d0d2b,#2d2b6e); color: #e8d5ff; }
+        .tc-forest        { background: linear-gradient(135deg,#122418,#2d5a3d); color: #d8f3dc; }
+
+        /* ── Per-page theme rows ──────────────────────────────── */
+        .page-theme-row {
+            display: flex;
+            align-items: center;
+            padding: 0.65rem 0;
+            border-bottom: 1px solid var(--border-color);
+            gap: 1rem;
+        }
+        .page-theme-row:last-child { border-bottom: none; }
+        .page-theme-row .page-icon { font-size: 1.1rem; width: 1.5rem; text-align: center; }
+        .page-theme-row .page-name { flex: 1; font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
+        .page-theme-row select      { flex: 2; }
+
+        /* ── Starfield animation for galaxy/animated ─────────── */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50%       { opacity: 1;   transform: scale(1.2); }
+        }
+        .star-bg {
+            position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        .star {
+            position: absolute; width: 2px; height: 2px; border-radius: 50%;
+            background: white; animation: twinkle var(--dur, 3s) ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+        }
+    </style>
+</head>
+<body>
+<div class="app-layout">
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">LifeOS</div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item" data-page="dashboard.html"><span class="nav-icon">📊</span><span>Dashboard</span></a>
+            <a href="notes.html"     class="nav-item" data-page="notes.html"><span class="nav-icon">📝</span><span>Notes</span></a>
+            <a href="goals.html"     class="nav-item" data-page="goals.html"><span class="nav-icon">🎯</span><span>Goals</span></a>
+            <a href="deadlines.html" class="nav-item" data-page="deadlines.html"><span class="nav-icon">⏰</span><span>Deadlines</span></a>
+            <a href="routines.html"  class="nav-item" data-page="routines.html"><span class="nav-icon">🔁</span><span>Routines</span></a>
+            <a href="thoughts.html"  class="nav-item" data-page="thoughts.html"><span class="nav-icon">💭</span><span>Thoughts</span></a>
+            <a href="profile.html"   class="nav-item" data-page="profile.html"><span class="nav-icon">⚙️</span><span>Profile</span></a>
+        </nav>
+    </aside>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <header class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle" id="menuToggle">☰</button>
+            <h1 class="page-title">Profile &amp; Settings</h1>
+        </div>
+        <div class="topbar-right">
+            <button class="topbar-icon" id="themeToggle">🌙</button>
+            <div class="user-menu" id="logoutBtn">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span class="user-name" id="userName">User</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+
+        <!-- ── Global Themes ────────────────────────────────── -->
+        <div class="card" style="margin-bottom:1.5rem;">
+            <div class="card-header">
+                <h3 class="card-title">🎨 Choose Your Theme</h3>
+            </div>
+            <div class="card-content">
+                <div class="theme-grid" id="globalThemeGrid">
+                    <!-- Cards injected by JS -->
+                </div>
+                <button class="btn btn-primary" id="applyGlobalTheme" style="margin-top:0.5rem;">
+                    Apply Selected Theme to All Pages
+                </button>
+            </div>
+        </div>
+
+        <!-- ── Individual Page Themes ───────────────────────── -->
+        <div class="card" style="margin-bottom:1.5rem;">
+            <div class="card-header">
+                <h3 class="card-title">📄 Individual Page Themes</h3>
+                <span style="font-size:0.78rem;color:var(--text-tertiary);margin-left:0.5rem;">Set different themes for each page</span>
+            </div>
+            <div class="card-content" id="pageThemeRows">
+                <!-- Rows injected by JS -->
+            </div>
+        </div>
+
+        <!-- ── Display Preferences ──────────────────────────── -->
+        <div class="card">
+            <div class="card-header"><h3 class="card-title">⚙️ Display Preferences</h3></div>
+            <div class="card-content" style="display:flex;flex-direction:column;gap:1rem;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <div>
+                        <div style="font-weight:600;color:var(--text-primary);">Dark Mode</div>
+                        <div style="font-size:0.8rem;color:var(--text-tertiary);">Toggle light/dark appearance</div>
+                    </div>
+                    <button class="btn btn-secondary" id="darkModeToggleBtn">Toggle Dark Mode</button>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <div>
+                        <div style="font-weight:600;color:var(--text-primary);">Clear All Data</div>
+                        <div style="font-size:0.8rem;color:var(--text-tertiary);">Permanently delete all stored data</div>
+                    </div>
+                    <button class="btn btn-danger" id="clearDataBtn">Clear Data</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script type="module">
+import { initUI } from '../js/ui.js';
+import { protectPage } from '../js/auth.js';
+
+protectPage();
+initUI();
+
+// ── Theme definitions ──────────────────────────────────────────────────────
+const THEMES = [
+    { id: 'light',          emoji: '☀️',  name: 'Light',          cls: 'tc-light' },
+    { id: 'dark',           emoji: '🌙',  name: 'Dark',           cls: 'tc-dark' },
+    { id: 'pastel',         emoji: '🌸',  name: 'Pastel',         cls: 'tc-pastel' },
+    { id: 'animated',       emoji: '✨',  name: 'Animated',       cls: 'tc-animated' },
+    { id: 'cute-animals',   emoji: '🐻',  name: 'Cute Animals',   cls: 'tc-cute-animals' },
+    { id: 'pastel-flowers', emoji: '🌺',  name: 'Pastel Flowers', cls: 'tc-pastel-flowers' },
+    { id: 'bullet-journal', emoji: '📓',  name: 'Bullet Journal', cls: 'tc-bullet-journal' },
+    { id: 'daily-planner',  emoji: '📅',  name: 'Daily Planner',  cls: 'tc-daily-planner' },
+    { id: 'kawaii',         emoji: '🍭',  name: 'Kawaii',         cls: 'tc-kawaii' },
+    { id: 'notebook',       emoji: '📒',  name: 'Notebook',       cls: 'tc-notebook' },
+    { id: 'stickers',       emoji: '⭐',  name: 'Stickers',       cls: 'tc-stickers' },
+    { id: 'galaxy',         emoji: '🌌',  name: 'Galaxy',         cls: 'tc-galaxy' },
+    { id: 'forest',         emoji: '🌿',  name: 'Forest',         cls: 'tc-forest' },
+];
+
+const PAGES = [
+    { id: 'dashboard', icon: '📊', name: 'Dashboard', href: 'dashboard.html' },
+    { id: 'notes',     icon: '📝', name: 'Notes',     href: 'notes.html' },
+    { id: 'goals',     icon: '🎯', name: 'Goals',     href: 'goals.html' },
+    { id: 'deadlines', icon: '⏰', name: 'Deadlines', href: 'deadlines.html' },
+    { id: 'routines',  icon: '🔁', name: 'Routines',  href: 'routines.html' },
+    { id: 'thoughts',  icon: '💭', name: 'Thoughts',  href: 'thoughts.html' },
+    { id: 'profile',   icon: '⚙️', name: 'Profile',   href: 'profile.html' },
+];
+
+// ── State ──────────────────────────────────────────────────────────────────
+let selectedGlobal = localStorage.getItem('lifeos_global_theme') || 'light';
+const pageThemes   = JSON.parse(localStorage.getItem('lifeos_page_themes') || '{}');
+
+// ── Build global theme grid ────────────────────────────────────────────────
+const grid = document.getElementById('globalThemeGrid');
+THEMES.forEach(t => {
+    const card = document.createElement('div');
+    card.className = `theme-card ${t.cls}${selectedGlobal === t.id ? ' selected' : ''}`;
+    card.dataset.themeId = t.id;
+    card.innerHTML = `
+        <div class="theme-card-name">${t.emoji} ${t.name}</div>
+        <div class="theme-preview-label">Click to preview</div>
+    `;
+    card.addEventListener('click', () => {
+        selectedGlobal = t.id;
+        grid.querySelectorAll('.theme-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        // Live preview on this page
+        applyTheme(t.id);
+    });
+    grid.appendChild(card);
+});
+
+// ── Apply theme to current document ───────────────────────────────────────
+function applyTheme(themeId) {
+    document.documentElement.setAttribute('data-theme', themeId === 'light' ? '' : themeId);
+    // Special: starfield for galaxy/animated
+    document.querySelector('.star-bg')?.remove();
+    if (themeId === 'galaxy' || themeId === 'animated') {
+        addStarfield();
+    }
+}
+
+function addStarfield() {
+    const bg = document.createElement('div');
+    bg.className = 'star-bg';
+    for (let i = 0; i < 80; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        s.style.cssText = `
+            left:${Math.random()*100}%;
+            top:${Math.random()*100}%;
+            --dur:${2+Math.random()*4}s;
+            --delay:${Math.random()*4}s;
+            opacity:${0.2+Math.random()*0.8};
+            width:${1+Math.random()*2}px;
+            height:${1+Math.random()*2}px;
+        `;
+        bg.appendChild(s);
+    }
+    document.body.prepend(bg);
+}
+
+// ── Apply to All Pages button ──────────────────────────────────────────────
+document.getElementById('applyGlobalTheme').addEventListener('click', () => {
+    localStorage.setItem('lifeos_global_theme', selectedGlobal);
+    localStorage.setItem('theme', selectedGlobal === 'light' ? '' : selectedGlobal);
+    applyTheme(selectedGlobal);
+    // Clear per-page overrides so global takes effect everywhere
+    localStorage.setItem('lifeos_page_themes', JSON.stringify({}));
+    // Update selects
+    document.querySelectorAll('.page-theme-select').forEach(s => { s.value = ''; });
+    showToastLocal('Theme applied to all pages ✓', 'success');
+});
+
+// ── Build per-page theme rows ──────────────────────────────────────────────
+const themeOptions = THEMES.map(t => `<option value="${t.id}">${t.emoji} ${t.name}</option>`).join('');
+
+document.getElementById('pageThemeRows').innerHTML = PAGES.map(p => `
+    <div class="page-theme-row">
+        <span class="page-icon">${p.icon}</span>
+        <span class="page-name">${p.name}</span>
+        <select class="form-input page-theme-select" data-page-id="${p.id}" style="max-width:220px;">
+            <option value="">Use Global Theme</option>
+            ${themeOptions}
+        </select>
+        <a href="${p.href}" class="btn btn-secondary" style="font-size:0.78rem;padding:0.3rem 0.75rem;">Preview</a>
+    </div>
+`).join('');
+
+// Restore saved per-page selections
+document.querySelectorAll('.page-theme-select').forEach(sel => {
+    const saved = pageThemes[sel.dataset.pageId];
+    if (saved) sel.value = saved;
+    sel.addEventListener('change', () => {
+        pageThemes[sel.dataset.pageId] = sel.value;
+        localStorage.setItem('lifeos_page_themes', JSON.stringify(pageThemes));
+    });
+});
+
+// ── Dark mode quick toggle ─────────────────────────────────────────────────
+document.getElementById('darkModeToggleBtn').addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    selectedGlobal = next;
+    localStorage.setItem('lifeos_global_theme', next);
+    localStorage.setItem('theme', next);
+    applyTheme(next);
+    // Update card selection
+    grid.querySelectorAll('.theme-card').forEach(c => {
+        c.classList.toggle('selected', c.dataset.themeId === next);
+    });
+});
+
+// ── Clear data ────────────────────────────────────────────────────────────
+document.getElementById('clearDataBtn').addEventListener('click', () => {
+    if (confirm('This will permanently delete ALL your notes, goals, deadlines, routines, and thoughts. This cannot be undone. Continue?')) {
+        ['lifeos_notes','lifeos_goals','lifeos_deadlines','lifeos_routines','lifeos_thoughts'].forEach(k => localStorage.removeItem(k));
+        showToastLocal('All data cleared', 'success');
+    }
+});
+
+// ── Apply current theme on load ────────────────────────────────────────────
+applyTheme(selectedGlobal);
+
+// ── Mini toast (no import needed) ─────────────────────────────────────────
+function showToastLocal(msg, type = 'info') {
+    const t = document.createElement('div');
+    t.textContent = msg;
+    t.style.cssText = `
+        position:fixed;top:20px;right:20px;padding:0.8rem 1.2rem;
+        background:${type === 'success' ? '#10b981' : '#3b82f6'};
+        color:#fff;border-radius:8px;font-size:0.9rem;
+        box-shadow:0 4px 12px rgba(0,0,0,0.2);z-index:99999;
+        animation:slideIn 0.2s ease;
+    `;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2500);
+}
+</script>
+</body>
+</html>

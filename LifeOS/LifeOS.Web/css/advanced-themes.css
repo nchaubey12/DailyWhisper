@@ -1,0 +1,371 @@
+/* Advanced Animated Themes with More Effects */
+
+/* Butterfly Garden Theme */
+[data-theme="butterfly-garden"] {
+    --bg-primary: #f0fff4;
+    --bg-secondary: #dcfce7;
+    --bg-tertiary: #bbf7d0;
+    --text-primary: #14532d;
+    --text-secondary: #166534;
+    --text-tertiary: #22c55e;
+    --border-color: #86efac;
+    --primary-color: #10b981;
+    --primary-hover: #059669;
+}
+
+/* Snow Theme - Winter wonderland */
+[data-theme="snow"] {
+    --bg-primary: #f0f9ff;
+    --bg-secondary: #e0f2fe;
+    --bg-tertiary: #bae6fd;
+    --text-primary: #0c4a6e;
+    --text-secondary: #075985;
+    --text-tertiary: #0ea5e9;
+    --border-color: #7dd3fc;
+    --primary-color: #0284c7;
+    --primary-hover: #0369a1;
+}
+
+/* Confetti Theme - Celebration */
+[data-theme="confetti"] {
+    --bg-primary: #ffffff;
+    --bg-secondary: #fef3c7;
+    --bg-tertiary: #fde68a;
+    --text-primary: #78350f;
+    --text-secondary: #92400e;
+    --text-tertiary: #b45309;
+    --border-color: #fcd34d;
+    --primary-color: #f59e0b;
+    --primary-hover: #d97706;
+}
+
+/* Starfield Theme - Deep space */
+[data-theme="starfield"] {
+    --bg-primary: #0a0a1a;
+    --bg-secondary: #1a1a3a;
+    --bg-tertiary: #2a2a4a;
+    --text-primary: #e0e0ff;
+    --text-secondary: #b0b0dd;
+    --text-tertiary: #8080bb;
+    --border-color: #4040aa;
+    --primary-color: #6060ff;
+    --primary-hover: #8080ff;
+}
+
+/* Aurora Theme - Northern lights */
+[data-theme="aurora"] {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --text-tertiary: #94a3b8;
+    --border-color: #475569;
+    --primary-color: #06b6d4;
+    --primary-hover: #0891b2;
+}
+
+[data-theme="aurora"] body {
+    background: linear-gradient(
+        135deg,
+        #0f172a 0%,
+        #1e3a8a 25%,
+        #7c3aed 50%,
+        #db2777 75%,
+        #0f172a 100%
+    );
+    background-size: 400% 400%;
+    animation: aurora 15s ease infinite;
+}
+
+@keyframes aurora {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Underwater Theme */
+[data-theme="underwater"] {
+    --bg-primary: #ecfeff;
+    --bg-secondary: #cffafe;
+    --bg-tertiary: #a5f3fc;
+    --text-primary: #164e63;
+    --text-secondary: #0e7490;
+    --text-tertiary: #0891b2;
+    --border-color: #67e8f9;
+    --primary-color: #06b6d4;
+    --primary-hover: #0891b2;
+}
+
+/* Candy Theme - Sweet and colorful */
+[data-theme="candy"] {
+    --bg-primary: #fff1f2;
+    --bg-secondary: #ffe4e6;
+    --bg-tertiary: #fecdd3;
+    --text-primary: #881337;
+    --text-secondary: #9f1239;
+    --text-tertiary: #be123c;
+    --border-color: #fda4af;
+    --primary-color: #f43f5e;
+    --primary-hover: #e11d48;
+}
+
+[data-theme="candy"] .card,
+[data-theme="candy"] .widget {
+    background: linear-gradient(135deg, 
+        #fce7f3 0%, 
+        #fbcfe8 25%, 
+        #f9a8d4 50%, 
+        #f472b6 75%, 
+        #ec4899 100%
+    );
+    background-size: 200% 200%;
+    animation: candyShift 10s ease infinite;
+}
+
+@keyframes candyShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Sunset Theme */
+[data-theme="sunset"] {
+    --bg-primary: #fff7ed;
+    --bg-secondary: #ffedd5;
+    --bg-tertiary: #fed7aa;
+    --text-primary: #7c2d12;
+    --text-secondary: #9a3412;
+    --text-tertiary: #c2410c;
+    --border-color: #fdba74;
+    --primary-color: #f97316;
+    --primary-hover: #ea580c;
+}
+
+[data-theme="sunset"] body {
+    background: linear-gradient(180deg,
+        #fef3c7 0%,
+        #fde68a 20%,
+        #fbbf24 40%,
+        #f97316 60%,
+        #dc2626 80%,
+        #7c2d12 100%
+    );
+}
+
+/* Retro Gaming Theme */
+[data-theme="retro-game"] {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2a2a2a;
+    --bg-tertiary: #3a3a3a;
+    --text-primary: #00ff00;
+    --text-secondary: #00cc00;
+    --text-tertiary: #009900;
+    --border-color: #00ff00;
+    --primary-color: #00ff00;
+    --primary-hover: #00cc00;
+}
+
+[data-theme="retro-game"] * {
+    font-family: 'Courier New', monospace;
+    image-rendering: pixelated;
+}
+
+[data-theme="retro-game"] .card,
+[data-theme="retro-game"] .widget {
+    border: 3px solid #00ff00;
+    border-radius: 0;
+    box-shadow: 0 0 10px #00ff00;
+    animation: pixelGlow 2s ease-in-out infinite;
+}
+
+@keyframes pixelGlow {
+    0%, 100% { box-shadow: 0 0 10px #00ff00; }
+    50% { box-shadow: 0 0 20px #00ff00; }
+}
+
+/* Neon City Theme */
+[data-theme="neon-city"] {
+    --bg-primary: #0f0f23;
+    --bg-secondary: #1a1a3e;
+    --bg-tertiary: #2a2a5e;
+    --text-primary: #ff00ff;
+    --text-secondary: #ff69b4;
+    --text-tertiary: #da70d6;
+    --border-color: #ff00ff;
+    --primary-color: #00ffff;
+    --primary-hover: #00e6e6;
+}
+
+[data-theme="neon-city"] .card,
+[data-theme="neon-city"] .widget {
+    border: 2px solid #ff00ff;
+    box-shadow: 
+        0 0 10px #ff00ff,
+        inset 0 0 10px rgba(255, 0, 255, 0.1);
+    animation: neonPulse 3s ease-in-out infinite;
+}
+
+@keyframes neonPulse {
+    0%, 100% { 
+        box-shadow: 
+            0 0 10px #ff00ff,
+            inset 0 0 10px rgba(255, 0, 255, 0.1);
+    }
+    50% { 
+        box-shadow: 
+            0 0 20px #ff00ff,
+            0 0 30px #ff00ff,
+            inset 0 0 20px rgba(255, 0, 255, 0.2);
+    }
+}
+
+/* Minimalist Zen Theme */
+[data-theme="zen"] {
+    --bg-primary: #fafaf9;
+    --bg-secondary: #f5f5f4;
+    --bg-tertiary: #e7e5e4;
+    --text-primary: #1c1917;
+    --text-secondary: #44403c;
+    --text-tertiary: #78716c;
+    --border-color: #d6d3d1;
+    --primary-color: #78716c;
+    --primary-hover: #57534e;
+}
+
+[data-theme="zen"] * {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="zen"] .card,
+[data-theme="zen"] .widget {
+    background: #fafaf9;
+    border: 1px solid #e7e5e4;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Vintage Typewriter Theme */
+[data-theme="typewriter"] {
+    --bg-primary: #f5f1e8;
+    --bg-secondary: #e8e0d5;
+    --bg-tertiary: #d9cfc0;
+    --text-primary: #2c2416;
+    --text-secondary: #4a3f2e;
+    --text-tertiary: #6b5d46;
+    --border-color: #c4b5a0;
+    --primary-color: #8b6f47;
+    --primary-hover: #6f5639;
+}
+
+[data-theme="typewriter"] body {
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect fill="%23f5f1e8" width="100" height="100"/><g fill="%23e8e0d5"><circle cx="5" cy="5" r="1"/><circle cx="95" cy="95" r="1"/></g></svg>');
+}
+
+[data-theme="typewriter"] * {
+    font-family: 'Courier New', 'Courier', monospace;
+}
+
+[data-theme="typewriter"] .card,
+[data-theme="typewriter"] .widget {
+    background: #f5f1e8;
+    border: 2px solid #8b6f47;
+    box-shadow: 3px 3px 0 #c4b5a0;
+}
+
+/* Holographic Theme */
+[data-theme="holographic"] {
+    --bg-primary: #1a1a2e;
+    --bg-secondary: #16213e;
+    --bg-tertiary: #0f3460;
+    --text-primary: #eee;
+    --text-secondary: #cbd5e1;
+    --text-tertiary: #94a3b8;
+    --border-color: #0f3460;
+    --primary-color: #e94560;
+    --primary-hover: #f56476;
+}
+
+[data-theme="holographic"] .card,
+[data-theme="holographic"] .widget {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 0, 128, 0.1) 0%,
+        rgba(0, 255, 255, 0.1) 50%,
+        rgba(128, 0, 255, 0.1) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    animation: holoShift 5s ease infinite;
+}
+
+@keyframes holoShift {
+    0%, 100% { filter: hue-rotate(0deg); }
+    50% { filter: hue-rotate(30deg); }
+}
+
+/* Cottagecore Theme */
+[data-theme="cottagecore"] {
+    --bg-primary: #fffbf0;
+    --bg-secondary: #fff8e7;
+    --bg-tertiary: #fff0d6;
+    --text-primary: #3d2817;
+    --text-secondary: #5c3d2e;
+    --text-tertiary: #8b6f47;
+    --border-color: #d4b896;
+    --primary-color: #a0826d;
+    --primary-hover: #8b6f47;
+}
+
+[data-theme="cottagecore"] .card,
+[data-theme="cottagecore"] .widget {
+    background: linear-gradient(135deg, #fffbf0 0%, #fff8e7 100%);
+    border: 3px solid #d4b896;
+    border-style: dashed;
+    position: relative;
+}
+
+[data-theme="cottagecore"] .card::before {
+    content: '🌿';
+    position: absolute;
+    top: -15px;
+    left: 10px;
+    font-size: 1.5rem;
+    background: #fffbf0;
+    padding: 0 0.5rem;
+}
+
+/* Cosmic Dream Theme */
+[data-theme="cosmic-dream"] {
+    --bg-primary: #1a0b2e;
+    --bg-secondary: #2d1b4e;
+    --bg-tertiary: #4a2c6d;
+    --text-primary: #f0e6ff;
+    --text-secondary: #d4c5f9;
+    --text-tertiary: #b8a4f3;
+    --border-color: #6d4aad;
+    --primary-color: #a78bfa;
+    --primary-hover: #c4b5fd;
+}
+
+[data-theme="cosmic-dream"] body {
+    background: radial-gradient(ellipse at center, 
+        #2d1b4e 0%, 
+        #1a0b2e 70%, 
+        #0a0515 100%
+    );
+}
+
+[data-theme="cosmic-dream"] .card,
+[data-theme="cosmic-dream"] .widget {
+    background: rgba(106, 74, 173, 0.1);
+    border: 1px solid rgba(167, 139, 250, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(106, 74, 173, 0.2);
+    backdrop-filter: blur(4px);
+}
+
+/* Add glow effect to all interactive elements in cosmic theme */
+[data-theme="cosmic-dream"] .btn-primary {
+    box-shadow: 0 0 20px rgba(167, 139, 250, 0.5);
+}
+
+[data-theme="cosmic-dream"] .btn-primary:hover {
+    box-shadow: 0 0 30px rgba(167, 139, 250, 0.8);
+}

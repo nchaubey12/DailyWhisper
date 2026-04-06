@@ -2,16 +2,12 @@ import api from './api.js';
 import { protectPage } from './auth.js';
 import { initUI, openModal, closeModal, showToast, formatDate } from './ui.js';
 
-// Protect this page
 protectPage();
-
-// Initialize UI
 initUI();
 
 let notes = [];
 let currentNoteId = null;
 
-// Load notes on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadNotes();
     initEventListeners();
@@ -19,11 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function loadNotes() {
     try {
-        notes = await api.get('/notes');
+        const result = await api.get('/notes');
+        // FIX: api.get can return null on 204 or network hiccup
+        notes = Array.isArray(result) ? result : [];
         renderNotes(notes);
     } catch (error) {
         console.error('Failed to load notes:', error);
-        showToast('Failed to load notes', 'error');
+        showToast('Failed to load notes — check the backend is running', 'error');
+        notes = [];
+        renderNotes(notes);
     }
 }
 
@@ -31,116 +31,156 @@ function renderNotes(notesToRender = notes) {
     const grid = document.getElementById('notesGrid');
     const emptyState = document.getElementById('emptyState');
 
-    if (notesToRender.length === 0) {
+    if (!grid) return;
+
+    if (!notesToRender || notesToRender.length === 0) {
         grid.classList.add('hidden');
-        emptyState.classList.remove('hidden');
+        if (emptyState) emptyState.classList.remove('hidden');
         return;
     }
 
     grid.classList.remove('hidden');
-    emptyState.classList.add('hidden');
+    if (emptyState) emptyState.classList.add('hidden');
 
     grid.innerHTML = notesToRender.map(note => `
-        <div class="note-card ${note.isPinned ? 'pinned' : ''}" 
-             style="background-color: ${note.color}; border-left: 4px solid ${getDarkerShade(note.color)};" 
-             data-id="${note.id}">
-            <div class="card-header">
-                <h3 style="color: var(--text-primary); margin: 0; font-size: 1.125rem;">
-                    ${escapeHtml(note.title)}
-                </h3>
-                <button class="btn-icon btn-secondary pin-btn" data-id="${note.id}">
-                    ${note.isPinned ? '📌' : '📍'}
-                </button>
+        <div class="card" data-id="${note.id}" style="
+            cursor:pointer;
+            display:flex;
+            flex-direction:column;
+            align-items:stretch;
+            text-align:left;
+            background:${note.color || '#fef3c7'};
+        ">
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:flex-start;
+                margin-bottom:0.75rem;
+                width:100%;
+                text-align:left;
+            ">
+                <span style="
+                    font-size:1.1rem;
+                    font-weight:600;
+                    color:var(--text-primary);
+                    text-align:left;
+                    word-break:break-word;
+                    flex:1;
+                ">${escapeHtml(note.title || 'Untitled')}</span>
+                <button class="pin-btn" data-id="${note.id}" style="
+                    background:none;
+                    border:none;
+                    cursor:pointer;
+                    font-size:1rem;
+                    flex-shrink:0;
+                    padding:0;
+                    margin-left:0.5rem;
+                ">${note.isPinned ? '📌' : '📍'}</button>
             </div>
-            <div class="card-content" style="margin-top: 0.75rem;">
-                <p style="color: var(--text-secondary); white-space: pre-wrap;">
-                    ${escapeHtml(note.content.substring(0, 150))}${note.content.length > 150 ? '...' : ''}
-                </p>
-            </div>
-            ${note.tags.length > 0 ? `
-                <div class="tags-container">
-                    ${note.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+
+            <div style="
+                flex:1;
+                width:100%;
+                text-align:left;
+                color:var(--text-secondary);
+                font-size:0.9rem;
+                white-space:pre-wrap;
+                word-break:break-word;
+                line-height:1.5;
+                display:block;
+            ">${escapeHtml((note.content || '').substring(0, 150))}${(note.content || '').length > 150 ? '...' : ''}</div>
+
+            ${(note.tags || []).length > 0 ? `
+                <div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.75rem;justify-content:flex-start;">
+                    ${note.tags.map(tag => `<span class="badge badge-secondary">${escapeHtml(tag)}</span>`).join('')}
                 </div>
             ` : ''}
-            <div class="card-footer" style="font-size: 0.875rem; color: var(--text-tertiary);">
-                <span>${formatDate(note.updatedAt)}</span>
+
+            <div style="
+                margin-top:1rem;
+                padding-top:0.75rem;
+                border-top:1px solid var(--border-color);
+                display:flex;
+                align-items:center;
+                width:100%;
+                text-align:left;
+            ">
+                <span style="font-size:0.875rem;color:var(--text-tertiary);">${formatDate(note.updatedAt)}</span>
+                ${note.isPinned ? '<span style="margin-left:auto;font-size:0.75rem;">📌 Pinned</span>' : ''}
             </div>
         </div>
     `).join('');
 
-    // Add click handlers
-    document.querySelectorAll('.note-card').forEach(card => {
+    document.querySelectorAll('.card[data-id]').forEach(card => {
         card.addEventListener('click', (e) => {
             if (!e.target.closest('.pin-btn')) {
-                const noteId = card.dataset.id;
-                editNote(noteId);
+                editNote(card.dataset.id);
             }
         });
     });
 
-    // Add pin button handlers
     document.querySelectorAll('.pin-btn').forEach(btn => {
         btn.addEventListener('click', async (e) => {
             e.stopPropagation();
-            const noteId = btn.dataset.id;
-            await togglePin(noteId);
+            await togglePin(btn.dataset.id);
         });
     });
 }
 
 function getDarkerShade(color) {
-    // Simple function to darken a hex color
-    const hex = color.replace('#', '');
-    const r = parseInt(hex.substr(0, 2), 16);
-    const g = parseInt(hex.substr(2, 2), 16);
-    const b = parseInt(hex.substr(4, 2), 16);
-    
-    const darker = (val) => Math.max(0, Math.floor(val * 0.7));
-    
-    return `#${darker(r).toString(16).padStart(2, '0')}${darker(g).toString(16).padStart(2, '0')}${darker(b).toString(16).padStart(2, '0')}`;
+    if (!color || !color.startsWith('#') || color.length < 7) return '#d4a373';
+    try {
+        const r = parseInt(color.substr(1, 2), 16);
+        const g = parseInt(color.substr(3, 2), 16);
+        const b = parseInt(color.substr(5, 2), 16);
+        const d = (v) => Math.max(0, Math.floor(v * 0.7)).toString(16).padStart(2, '0');
+        return `#${d(r)}${d(g)}${d(b)}`;
+    } catch {
+        return '#ccaa88';
+    }
 }
 
 function initEventListeners() {
-    // New note button
-    document.getElementById('newNoteBtn').addEventListener('click', () => {
+    // FIX: use optional chaining so missing elements don't throw
+    document.getElementById('newNoteBtn')?.addEventListener('click', () => {
         currentNoteId = null;
         resetForm();
-        document.getElementById('modalTitle').textContent = 'New Note';
-        document.getElementById('deleteNoteBtn').classList.add('hidden');
+        const titleEl = document.getElementById('modalTitle');
+        if (titleEl) titleEl.textContent = 'New Note';
+        document.getElementById('deleteNoteBtn')?.classList.add('hidden');
         openModal('noteModal');
     });
 
-    // Note form submission
-    document.getElementById('noteForm').addEventListener('submit', async (e) => {
+    document.getElementById('noteForm')?.addEventListener('submit', async (e) => {
         e.preventDefault();
         await saveNote();
     });
 
-    // Delete note button
-    document.getElementById('deleteNoteBtn').addEventListener('click', async () => {
-        if (confirm('Are you sure you want to delete this note?')) {
+    document.getElementById('deleteNoteBtn')?.addEventListener('click', async () => {
+        if (currentNoteId && confirm('Are you sure you want to delete this note?')) {
             await deleteNote(currentNoteId);
         }
     });
 
-    // Color picker
     document.querySelectorAll('.color-option').forEach(option => {
         option.addEventListener('click', () => {
-            document.querySelectorAll('.color-option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
+            document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
             option.classList.add('selected');
-            document.getElementById('noteColor').value = option.dataset.color;
+            const colorEl = document.getElementById('noteColor');
+            if (colorEl) colorEl.value = option.dataset.color;
         });
     });
 
-    // Search
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase();
-        const filtered = notes.filter(note => 
-            note.title.toLowerCase().includes(query) ||
-            note.content.toLowerCase().includes(query) ||
-            note.tags.some(tag => tag.toLowerCase().includes(query))
+    document.getElementById('searchInput')?.addEventListener('input', (e) => {
+        const query = (e.target.value || '').toLowerCase();
+        if (!query) {
+            renderNotes(notes);
+            return;
+        }
+        const filtered = notes.filter(note =>
+            (note.title || '').toLowerCase().includes(query) ||
+            (note.content || '').toLowerCase().includes(query) ||
+            (note.tags || []).some(tag => tag.toLowerCase().includes(query))
         );
         renderNotes(filtered);
     });
@@ -148,32 +188,32 @@ function initEventListeners() {
 
 async function saveNote() {
     const noteData = {
-        title: document.getElementById('noteTitle').value,
-        content: document.getElementById('noteContent').value,
-        tags: document.getElementById('noteTags').value
-            .split(',')
-            .map(t => t.trim())
-            .filter(t => t),
-        color: document.getElementById('noteColor').value,
+        title:   (document.getElementById('noteTitle')?.value || '').trim(),
+        content: document.getElementById('noteContent')?.value || '',
+        tags: (document.getElementById('noteTags')?.value || '')
+            .split(',').map(t => t.trim()).filter(t => t),
+        color:    document.getElementById('noteColor')?.value || '#fef3c7',
         isPinned: false
     };
 
+    if (!noteData.title) {
+        showToast('Please enter a title', 'error');
+        return;
+    }
+
     try {
         if (currentNoteId) {
-            // Update existing note
             await api.put(`/notes/${currentNoteId}`, noteData);
             showToast('Note updated successfully', 'success');
         } else {
-            // Create new note
             await api.post('/notes', noteData);
             showToast('Note created successfully', 'success');
         }
-
         closeModal('noteModal');
         await loadNotes();
     } catch (error) {
         console.error('Failed to save note:', error);
-        showToast('Failed to save note', 'error');
+        showToast(`Failed to save note: ${error.message}`, 'error');
     }
 }
 
@@ -182,23 +222,21 @@ async function editNote(noteId) {
     if (!note) return;
 
     currentNoteId = noteId;
-    
-    document.getElementById('noteId').value = note.id;
-    document.getElementById('noteTitle').value = note.title;
-    document.getElementById('noteContent').value = note.content;
-    document.getElementById('noteTags').value = note.tags.join(', ');
-    document.getElementById('noteColor').value = note.color;
 
-    // Set selected color
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+    set('noteId',      note.id);
+    set('noteTitle',   note.title || '');
+    set('noteContent', note.content || '');
+    set('noteTags',    (note.tags || []).join(', '));
+    set('noteColor',   note.color || '#fef3c7');
+
     document.querySelectorAll('.color-option').forEach(opt => {
-        opt.classList.remove('selected');
-        if (opt.dataset.color === note.color) {
-            opt.classList.add('selected');
-        }
+        opt.classList.toggle('selected', opt.dataset.color === note.color);
     });
 
-    document.getElementById('modalTitle').textContent = 'Edit Note';
-    document.getElementById('deleteNoteBtn').classList.remove('hidden');
+    const titleEl = document.getElementById('modalTitle');
+    if (titleEl) titleEl.textContent = 'Edit Note';
+    document.getElementById('deleteNoteBtn')?.classList.remove('hidden');
     openModal('noteModal');
 }
 
@@ -210,7 +248,7 @@ async function deleteNote(noteId) {
         await loadNotes();
     } catch (error) {
         console.error('Failed to delete note:', error);
-        showToast('Failed to delete note', 'error');
+        showToast(`Failed to delete note: ${error.message}`, 'error');
     }
 }
 
@@ -218,27 +256,27 @@ async function togglePin(noteId) {
     try {
         await api.patch(`/notes/${noteId}/pin`);
         await loadNotes();
-        showToast('Note pin toggled', 'success');
+        const note = notes.find(n => n.id === noteId);
+        showToast(note?.isPinned ? 'Note unpinned' : 'Note pinned', 'success');
     } catch (error) {
         console.error('Failed to toggle pin:', error);
-        showToast('Failed to toggle pin', 'error');
+        showToast(`Failed to toggle pin: ${error.message}`, 'error');
     }
 }
 
 function resetForm() {
-    document.getElementById('noteForm').reset();
-    document.getElementById('noteId').value = '';
-    document.getElementById('noteColor').value = '#fef3c7';
+    document.getElementById('noteForm')?.reset();
+    const idEl = document.getElementById('noteId');
+    if (idEl) idEl.value = '';
+    const colorEl = document.getElementById('noteColor');
+    if (colorEl) colorEl.value = '#fef3c7';
     document.querySelectorAll('.color-option').forEach(opt => {
-        opt.classList.remove('selected');
-        if (opt.dataset.color === '#fef3c7') {
-            opt.classList.add('selected');
-        }
+        opt.classList.toggle('selected', opt.dataset.color === '#fef3c7');
     });
 }
 
 function escapeHtml(text) {
     const div = document.createElement('div');
-    div.textContent = text;
+    div.textContent = text || '';
     return div.innerHTML;
 }
