@@ -8,10 +8,135 @@
     <link rel="stylesheet" href="../css/themes.css">
     <link rel="stylesheet" href="../css/layout.css">
     <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/cute-themes.css">
+    <link rel="stylesheet" href="../css/advanced-themes.css">
+    <style>
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .widget {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .widget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .widget-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .mini-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.25rem;
+        }
+
+        .cal-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .cal-day.header {
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .cal-day.active {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .cal-day.today {
+            border: 2px solid var(--primary-color);
+        }
+
+        .streak-counter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            border-radius: 12px;
+            color: white;
+        }
+
+        .streak-number {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .productivity-bar {
+            margin-bottom: 1rem;
+        }
+
+        .productivity-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .progress-bar-container {
+            height: 24px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 0.5rem;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: width 0.5s ease;
+        }
+
+        .ai-chat {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+
+        .ai-message {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            background: var(--bg-tertiary);
+        }
+
+        .ai-input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+    </style>
 </head>
 <body>
     <div class="app-layout">
-        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-logo">LifeOS</div>
@@ -41,13 +166,23 @@
                     <span class="nav-icon">💭</span>
                     <span>Thoughts</span>
                 </a>
+                <a href="learning.html" class="nav-item" data-page="learning.html">
+                    <span class="nav-icon">📖</span>
+                    <span>Learning</span>
+                </a>
+                <a href="achievements.html" class="nav-item">
+                    <span class="nav-icon">🏆</span>
+                    <span>Achievements</span>
+                </a>
+                <a href="profile.html" class="nav-item" data-page="profile.html">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Profile</span>
+                </a>
             </nav>
         </aside>
 
-        <!-- Sidebar Overlay (mobile) -->
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-        <!-- Topbar -->
         <header class="topbar">
             <div class="topbar-left">
                 <button class="menu-toggle" id="menuToggle">☰</button>
@@ -62,9 +197,77 @@
             </div>
         </header>
 
-        <!-- Main Content -->
         <main class="main-content">
-            <div class="grid grid-3" id="dashboardGrid">
+            <!-- Top Row - Summary Widgets -->
+            <div class="dashboard-grid">
+                <!-- Mini Calendar -->
+                <div class="widget">
+                    <div class="widget-header">
+                        <span class="widget-title">📅 Calendar</span>
+                        <span style="font-size: 0.875rem; color: var(--text-secondary);" id="calendarMonth">March 2026</span>
+                    </div>
+                    <div class="mini-calendar" id="miniCalendar">
+                        <!-- Calendar will be rendered here -->
+                    </div>
+                </div>
+
+                <!-- Streak Tracker -->
+                <div class="widget">
+                    <div class="widget-header">
+                        <span class="widget-title">🔥 Your Streaks</span>
+                    </div>
+                    <div id="streaksContainer">
+                        <!-- Streaks will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="widget">
+                    <div class="widget-header">
+                        <span class="widget-title">📊 Quick Stats</span>
+                    </div>
+                    <div id="quickStats" style="display: grid; gap: 1rem;">
+                        <!-- Stats will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Productivity Chart -->
+            <div class="widget" style="margin-bottom: 1.5rem;">
+                <div class="widget-header">
+                    <span class="widget-title">📈 Weekly Productivity</span>
+                    <span style="font-size: 0.875rem; color: var(--text-secondary);">Based on completed vs scheduled</span>
+                </div>
+                <div id="productivityChart">
+                    <!-- Productivity bars will be rendered here -->
+                </div>
+            </div>
+
+            <!-- AI Analysis Widget -->
+            <div class="widget">
+                <div class="widget-header">
+                    <span class="widget-title">🤖 AI Analysis</span>
+                    <span style="font-size: 0.875rem; color: var(--text-secondary);">Ask me about your data</span>
+                </div>
+                <div class="ai-chat" id="aiChat">
+                    <div class="ai-message">
+                        <strong>AI Assistant:</strong> Hi! I can analyze your productivity data. Try asking:
+                        <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                            <li>"How productive was I this week?"</li>
+                            <li>"What should I focus on?"</li>
+                            <li>"Analyze my learning progress"</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="ai-input-group">
+                    <input type="text" id="aiInput" class="form-input" placeholder="Ask me anything about your data..." 
+                           style="flex: 1;">
+                    <button class="btn btn-primary" id="aiAskBtn">Ask</button>
+                </div>
+            </div>
+
+            <!-- Module Summary Grid -->
+            <div class="dashboard-grid" id="dashboardGrid">
                 <!-- Summary cards will be loaded here -->
             </div>
         </main>

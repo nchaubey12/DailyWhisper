@@ -1,126 +1,359 @@
-/* Light Theme (Default) */
+/* ============================================================
+   LifeOS — themes.css
+   Light + Dark (base) + all profile-selectable themes
+   ============================================================ */
+
+/* ── Light (default) ──────────────────────────────────────── */
 :root {
-    --bg-primary: #ffffff;
-    --bg-secondary: #f8fafc;
-    --bg-tertiary: #f1f5f9;
-    --text-primary: #0f172a;
+    --bg-primary:     #ffffff;
+    --bg-secondary:   #f8fafc;
+    --bg-tertiary:    #f1f5f9;
+    --text-primary:   #0f172a;
     --text-secondary: #475569;
-    --text-tertiary: #94a3b8;
-    --border-color: #e2e8f0;
-    --primary-color: #3b82f6;
-    --primary-hover: #2563eb;
-    --success-color: #10b981;
-    --warning-color: #f59e0b;
-    --danger-color: #ef4444;
+    --text-tertiary:  #94a3b8;
+    --border-color:   #e2e8f0;
+    --primary-color:  #3b82f6;
+    --primary-hover:  #2563eb;
+    --success-color:  #10b981;
+    --warning-color:  #f59e0b;
+    --danger-color:   #ef4444;
     --gradient-start: #6366f1;
-    --gradient-end: #8b5cf6;
-    
-    /* Note colors */
-    --note-yellow: #fef3c7;
-    --note-green: #d1fae5;
-    --note-blue: #dbeafe;
-    --note-pink: #fce7f3;
-    --note-purple: #e9d5ff;
-    --note-orange: #fed7aa;
+    --gradient-end:   #8b5cf6;
+    --note-yellow:    #fef3c7;
+    --note-green:     #d1fae5;
+    --note-blue:      #dbeafe;
+    --note-pink:      #fce7f3;
+    --note-purple:    #e9d5ff;
+    --note-orange:    #fed7aa;
 }
 
-/* Dark Theme */
+/* ── Dark ─────────────────────────────────────────────────── */
 [data-theme="dark"] {
-    --bg-primary: #0f172a;
-    --bg-secondary: #1e293b;
-    --bg-tertiary: #334155;
-    --text-primary: #f1f5f9;
+    --bg-primary:     #0f172a;
+    --bg-secondary:   #1e293b;
+    --bg-tertiary:    #334155;
+    --text-primary:   #f1f5f9;
     --text-secondary: #cbd5e1;
-    --text-tertiary: #64748b;
-    --border-color: #334155;
-    --primary-color: #3b82f6;
-    --primary-hover: #60a5fa;
-    --success-color: #10b981;
-    --warning-color: #f59e0b;
-    --danger-color: #ef4444;
+    --text-tertiary:  #64748b;
+    --border-color:   #334155;
+    --primary-color:  #3b82f6;
+    --primary-hover:  #60a5fa;
+    --success-color:  #10b981;
+    --warning-color:  #f59e0b;
+    --danger-color:   #ef4444;
     --gradient-start: #4f46e5;
-    --gradient-end: #7c3aed;
-    
-    /* Note colors - darker versions */
-    --note-yellow: #422006;
-    --note-green: #064e3b;
-    --note-blue: #0c4a6e;
-    --note-pink: #831843;
-    --note-purple: #581c87;
-    --note-orange: #7c2d12;
+    --gradient-end:   #7c3aed;
+    --note-yellow:    #422006;
+    --note-green:     #064e3b;
+    --note-blue:      #0c4a6e;
+    --note-pink:      #831843;
+    --note-purple:    #581c87;
+    --note-orange:    #7c2d12;
 }
 
-/* Pastel Theme */
+/* ── Pastel ───────────────────────────────────────────────── */
 [data-theme="pastel"] {
-    --bg-primary: #fef6fb;
-    --bg-secondary: #fce8f3;
-    --bg-tertiary: #f9d5e5;
-    --text-primary: #4a2c3e;
-    --text-secondary: #7d5a6f;
-    --text-tertiary: #b39dab;
-    --border-color: #f0d9e7;
-    --primary-color: #d4a5c8;
-    --primary-hover: #c98dbc;
-    --success-color: #a8d5ba;
-    --warning-color: #f7d794;
-    --danger-color: #f8a5c2;
-    --gradient-start: #e8b4d4;
-    --gradient-end: #d4a5f8;
-    
-    /* Note colors - pastel versions */
-    --note-yellow: #fff9e6;
-    --note-green: #e8f5e9;
-    --note-blue: #e3f2fd;
-    --note-pink: #fce4ec;
-    --note-purple: #f3e5f5;
-    --note-orange: #fff3e0;
+    --bg-primary:     #fff0f6;
+    --bg-secondary:   #ffe4ef;
+    --bg-tertiary:    #ffc8dd;
+    --text-primary:   #4a1942;
+    --text-secondary: #7b3f6e;
+    --text-tertiary:  #b07faa;
+    --border-color:   #f9c4d4;
+    --primary-color:  #e05c97;
+    --primary-hover:  #c0437e;
+    --success-color:  #52b788;
+    --warning-color:  #f4a261;
+    --danger-color:   #e63946;
+    --gradient-start: #e05c97;
+    --gradient-end:   #9b5de5;
 }
 
-/* Animated Theme (with gradients and animations) */
+/* ── Galaxy ───────────────────────────────────────────────── */
+[data-theme="galaxy"] {
+    --bg-primary:     #05050f;
+    --bg-secondary:   #0d0d2b;
+    --bg-tertiary:    #1a1a4e;
+    --text-primary:   #e8d5ff;
+    --text-secondary: #b39ddb;
+    --text-tertiary:  #7c6fa0;
+    --border-color:   #2d2b6e;
+    --primary-color:  #7c4dff;
+    --primary-hover:  #651fff;
+    --success-color:  #00e676;
+    --warning-color:  #ffd740;
+    --danger-color:   #ff5252;
+    --gradient-start: #7c4dff;
+    --gradient-end:   #e040fb;
+    --note-yellow:    #2d2000;
+    --note-green:     #002d1a;
+    --note-blue:      #00102d;
+    --note-pink:      #2d0018;
+    --note-purple:    #1a002d;
+    --note-orange:    #2d1200;
+}
+
+/* Galaxy starfield background */
+[data-theme="galaxy"] body,
+[data-theme="galaxy"] .app-layout {
+    background: radial-gradient(ellipse at top, #1a1a4e 0%, #05050f 70%);
+    background-attachment: fixed;
+}
+
+[data-theme="galaxy"] .sidebar {
+    background: rgba(13, 13, 43, 0.92);
+    backdrop-filter: blur(12px);
+    border-right: 1px solid #2d2b6e;
+}
+
+[data-theme="galaxy"] .topbar {
+    background: rgba(5, 5, 15, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #2d2b6e;
+}
+
+[data-theme="galaxy"] .card {
+    background: rgba(26, 26, 78, 0.7);
+    border: 1px solid #2d2b6e;
+    backdrop-filter: blur(8px);
+}
+
+[data-theme="galaxy"] .modal {
+    background: #0d0d2b;
+    border: 1px solid #2d2b6e;
+}
+
+[data-theme="galaxy"] .form-input,
+[data-theme="galaxy"] .form-textarea,
+[data-theme="galaxy"] select {
+    background: #05050f;
+    border-color: #2d2b6e;
+    color: #e8d5ff;
+}
+
+[data-theme="galaxy"] .sidebar-logo {
+    background: linear-gradient(135deg, #7c4dff, #e040fb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ── Forest ───────────────────────────────────────────────── */
+[data-theme="forest"] {
+    --bg-primary:     #0a1a0e;
+    --bg-secondary:   #122418;
+    --bg-tertiary:    #1b3a23;
+    --text-primary:   #d8f3dc;
+    --text-secondary: #95c9a0;
+    --text-tertiary:  #52796f;
+    --border-color:   #2d5a3d;
+    --primary-color:  #40916c;
+    --primary-hover:  #2d6a4f;
+    --success-color:  #52b788;
+    --warning-color:  #f4a261;
+    --danger-color:   #e63946;
+    --gradient-start: #40916c;
+    --gradient-end:   #1b4332;
+    --note-yellow:    #2d2200;
+    --note-green:     #0a1a0e;
+    --note-blue:      #001a2d;
+    --note-pink:      #2d000e;
+    --note-purple:    #1a002d;
+    --note-orange:    #2d1200;
+}
+
+[data-theme="forest"] body,
+[data-theme="forest"] .app-layout {
+    background: linear-gradient(160deg, #0a1a0e 0%, #1b3a23 50%, #0a1a0e 100%);
+    background-attachment: fixed;
+}
+
+[data-theme="forest"] .sidebar {
+    background: rgba(10, 26, 14, 0.95);
+    border-right: 1px solid #2d5a3d;
+}
+
+[data-theme="forest"] .topbar {
+    background: rgba(10, 26, 14, 0.92);
+    border-bottom: 1px solid #2d5a3d;
+}
+
+[data-theme="forest"] .card {
+    background: rgba(18, 36, 24, 0.85);
+    border: 1px solid #2d5a3d;
+}
+
+[data-theme="forest"] .modal {
+    background: #122418;
+    border: 1px solid #2d5a3d;
+}
+
+[data-theme="forest"] .form-input,
+[data-theme="forest"] .form-textarea,
+[data-theme="forest"] select {
+    background: #0a1a0e;
+    border-color: #2d5a3d;
+    color: #d8f3dc;
+}
+
+[data-theme="forest"] .sidebar-logo {
+    color: #52b788;
+}
+
+[data-theme="forest"] .btn-primary {
+    background: #40916c;
+    border-color: #40916c;
+}
+[data-theme="forest"] .btn-primary:hover {
+    background: #2d6a4f;
+    border-color: #2d6a4f;
+}
+
+/* ── Animated (Starry Night) ──────────────────────────────── */
 [data-theme="animated"] {
-    --bg-primary: #1a1a2e;
-    --bg-secondary: #16213e;
-    --bg-tertiary: #0f3460;
-    --text-primary: #eee;
-    --text-secondary: #cbd5e1;
-    --text-tertiary: #94a3b8;
-    --border-color: #0f3460;
-    --primary-color: #e94560;
-    --primary-hover: #f56476;
-    --success-color: #00d4aa;
-    --warning-color: #ffa41b;
-    --danger-color: #e94560;
-    --gradient-start: #667eea;
-    --gradient-end: #764ba2;
-    
-    --note-yellow: #3d3522;
-    --note-green: #1f3a2e;
-    --note-blue: #1e3a5f;
-    --note-pink: #3d2235;
-    --note-purple: #2d2245;
-    --note-orange: #3d2a1f;
+    --bg-primary:     #0a0a2e;
+    --bg-secondary:   #12123e;
+    --bg-tertiary:    #1e1e55;
+    --text-primary:   #f0f0ff;
+    --text-secondary: #b8b8e8;
+    --text-tertiary:  #7070b8;
+    --border-color:   #2a2a6e;
+    --primary-color:  #6060e0;
+    --primary-hover:  #4040c0;
+    --success-color:  #40c080;
+    --warning-color:  #f0c040;
+    --danger-color:   #e04040;
+    --gradient-start: #6060e0;
+    --gradient-end:   #c060e0;
 }
 
-[data-theme="animated"] .card {
-    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
-    animation: gradientShift 10s ease infinite;
+/* ── Cute Animals ─────────────────────────────────────────── */
+[data-theme="cute-animals"] {
+    --bg-primary:     #fff8f0;
+    --bg-secondary:   #fff0e0;
+    --bg-tertiary:    #ffe4c4;
+    --text-primary:   #5c3317;
+    --text-secondary: #8b5e3c;
+    --text-tertiary:  #c4916b;
+    --border-color:   #f5cba7;
+    --primary-color:  #e07b39;
+    --primary-hover:  #c05e1f;
+    --success-color:  #52b788;
+    --warning-color:  #f4a261;
+    --danger-color:   #e63946;
+    --gradient-start: #e07b39;
+    --gradient-end:   #e05c97;
 }
 
-[data-theme="animated"] .btn-primary {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
-    animation: pulse 2s ease-in-out infinite;
+/* ── Pastel Flowers ───────────────────────────────────────── */
+[data-theme="pastel-flowers"] {
+    --bg-primary:     #f9f0ff;
+    --bg-secondary:   #f0e0ff;
+    --bg-tertiary:    #e4c8ff;
+    --text-primary:   #3a1a5c;
+    --text-secondary: #6b3d8f;
+    --text-tertiary:  #a07cbf;
+    --border-color:   #d4a8f0;
+    --primary-color:  #9b5de5;
+    --primary-hover:  #7b3dbf;
+    --success-color:  #52b788;
+    --warning-color:  #f4a261;
+    --danger-color:   #e63946;
+    --gradient-start: #9b5de5;
+    --gradient-end:   #e05c97;
 }
 
-@keyframes gradientShift {
-    0%, 100% { filter: hue-rotate(0deg); }
-    50% { filter: hue-rotate(10deg); }
+/* ── Bullet Journal ───────────────────────────────────────── */
+[data-theme="bullet-journal"] {
+    --bg-primary:     #faf7f2;
+    --bg-secondary:   #f5ede0;
+    --bg-tertiary:    #ecdcc8;
+    --text-primary:   #2c1810;
+    --text-secondary: #5c3820;
+    --text-tertiary:  #9c7860;
+    --border-color:   #d4bca0;
+    --primary-color:  #8b4513;
+    --primary-hover:  #6b3510;
+    --success-color:  #2d6a4f;
+    --warning-color:  #c17f24;
+    --danger-color:   #9b2335;
+    --gradient-start: #8b4513;
+    --gradient-end:   #5c3317;
 }
 
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.02); }
+/* ── Daily Planner ────────────────────────────────────────── */
+[data-theme="daily-planner"] {
+    --bg-primary:     #f0f4ff;
+    --bg-secondary:   #e0e8ff;
+    --bg-tertiary:    #c8d4ff;
+    --text-primary:   #1a2a5c;
+    --text-secondary: #3d5a9f;
+    --text-tertiary:  #7080bf;
+    --border-color:   #b0c0f0;
+    --primary-color:  #3d5a9f;
+    --primary-hover:  #2d4a8f;
+    --success-color:  #2d9f6f;
+    --warning-color:  #c4901f;
+    --danger-color:   #9f2d3d;
+    --gradient-start: #3d5a9f;
+    --gradient-end:   #6060e0;
 }
 
+/* ── Kawaii ───────────────────────────────────────────────── */
+[data-theme="kawaii"] {
+    --bg-primary:     #fff0f8;
+    --bg-secondary:   #ffe0f0;
+    --bg-tertiary:    #ffc8e8;
+    --text-primary:   #4a0a2c;
+    --text-secondary: #8b3d6b;
+    --text-tertiary:  #c07090;
+    --border-color:   #f0a8cc;
+    --primary-color:  #e05c97;
+    --primary-hover:  #c0437e;
+    --success-color:  #52c788;
+    --warning-color:  #f4c261;
+    --danger-color:   #e63960;
+    --gradient-start: #e05c97;
+    --gradient-end:   #9b5de5;
+}
+
+/* ── Notebook ─────────────────────────────────────────────── */
+[data-theme="notebook"] {
+    --bg-primary:     #fffef0;
+    --bg-secondary:   #fffce0;
+    --bg-tertiary:    #fff8c0;
+    --text-primary:   #1a1a00;
+    --text-secondary: #4a4a20;
+    --text-tertiary:  #8a8a50;
+    --border-color:   #c8c880;
+    --primary-color:  #4a7c59;
+    --primary-hover:  #2d5c3d;
+    --success-color:  #4a7c59;
+    --warning-color:  #c4901f;
+    --danger-color:   #9f2d2d;
+    --gradient-start: #4a7c59;
+    --gradient-end:   #2d5c9f;
+}
+
+/* ── Stickers ─────────────────────────────────────────────── */
+[data-theme="stickers"] {
+    --bg-primary:     #f0fff0;
+    --bg-secondary:   #e0ffe0;
+    --bg-tertiary:    #c8ffc8;
+    --text-primary:   #0a2a0a;
+    --text-secondary: #2a5a2a;
+    --text-tertiary:  #5a9a5a;
+    --border-color:   #a0e0a0;
+    --primary-color:  #2d9f2d;
+    --primary-hover:  #1d7f1d;
+    --success-color:  #2d9f2d;
+    --warning-color:  #c4901f;
+    --danger-color:   #9f2d2d;
+    --gradient-start: #2d9f2d;
+    --gradient-end:   #2d9f9f;
+}
+
+/* ── Base body rule (applies to all themes) ─────────────────── */
 body {
     background-color: var(--bg-primary);
     color: var(--text-primary);

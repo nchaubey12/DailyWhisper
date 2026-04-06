@@ -9,28 +9,37 @@
     <link rel="stylesheet" href="../css/layout.css">
     <link rel="stylesheet" href="../css/components.css">
     <style>
-        .mood-selector {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin: 1rem 0;
-        }
+        /* Mood picker buttons */
         .mood-option {
-            font-size: 2.5rem;
-            cursor: pointer;
-            opacity: 0.4;
-            transition: all 0.2s;
-            padding: 0.5rem;
+            font-size: 1.75rem;
+            background: none;
+            border: 3px solid transparent;
             border-radius: 50%;
+            padding: 0.3rem;
+            cursor: pointer;
+            transition: border-color 0.15s, transform 0.15s, background 0.15s;
+            line-height: 1;
         }
         .mood-option:hover {
-            opacity: 0.7;
-            transform: scale(1.1);
-        }
-        .mood-option.selected {
-            opacity: 1;
-            transform: scale(1.2);
+            transform: scale(1.15);
             background: var(--bg-tertiary);
+        }
+        /* selected state — works in both light and dark */
+        .mood-option.selected {
+            border-color: var(--primary-color, #3b82f6);
+            background: var(--bg-tertiary);
+            transform: scale(1.2);
+        }
+
+        /* Two-column layout for thoughts page */
+        .thoughts-layout {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 1.5rem;
+            align-items: start;
+        }
+        @media (max-width: 768px) {
+            .thoughts-layout { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -41,33 +50,17 @@
                 <div class="sidebar-logo">LifeOS</div>
             </div>
             <nav class="sidebar-nav">
-                <a href="dashboard.html" class="nav-item" data-page="dashboard.html">
-                    <span class="nav-icon">📊</span>
-                    <span>Dashboard</span>
-                </a>
-                <a href="notes.html" class="nav-item" data-page="notes.html">
-                    <span class="nav-icon">📝</span>
-                    <span>Notes</span>
-                </a>
-                <a href="goals.html" class="nav-item" data-page="goals.html">
-                    <span class="nav-icon">🎯</span>
-                    <span>Goals</span>
-                </a>
-                <a href="deadlines.html" class="nav-item" data-page="deadlines.html">
-                    <span class="nav-icon">⏰</span>
-                    <span>Deadlines</span>
-                </a>
-                <a href="routines.html" class="nav-item" data-page="routines.html">
-                    <span class="nav-icon">🔁</span>
-                    <span>Routines</span>
-                </a>
-                <a href="thoughts.html" class="nav-item" data-page="thoughts.html">
-                    <span class="nav-icon">💭</span>
-                    <span>Thoughts</span>
-                </a>
+                <a href="dashboard.html" class="nav-item" data-page="dashboard.html"><span class="nav-icon">📊</span><span>Dashboard</span></a>
+                <a href="notes.html"     class="nav-item" data-page="notes.html"><span class="nav-icon">📝</span><span>Notes</span></a>
+                <a href="goals.html"     class="nav-item" data-page="goals.html"><span class="nav-icon">🎯</span><span>Goals</span></a>
+                <a href="deadlines.html" class="nav-item" data-page="deadlines.html"><span class="nav-icon">⏰</span><span>Deadlines</span></a>
+                <a href="routines.html"  class="nav-item" data-page="routines.html"><span class="nav-icon">🔁</span><span>Routines</span></a>
+                <a href="thoughts.html"  class="nav-item" data-page="thoughts.html"><span class="nav-icon">💭</span><span>Thoughts</span></a>
+                <a href="learning.html"  class="nav-item" data-page="learning.html"><span class="nav-icon">📖</span><span>Learning</span></a>
+                <a href="achievements.html" class="nav-item"><span class="nav-icon">🏆</span><span>Achievements</span></a>
+                <a href="profile.html"   class="nav-item" data-page="profile.html"><span class="nav-icon">⚙️</span><span>Profile</span></a>
             </nav>
         </aside>
-
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
         <header class="topbar">
@@ -85,79 +78,96 @@
         </header>
 
         <main class="main-content">
-            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+            <div class="thoughts-layout">
+
+                <!-- Left: Journal list -->
                 <div>
-                    <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
-                        <h2 style="margin: 0;">Journal</h2>
-                        <button class="btn btn-primary" id="newThoughtBtn">
-                            <span>➕</span>
-                            <span>New Thought</span>
-                        </button>
+                    <div style="margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:center;">
+                        <h2 style="margin:0;color:var(--text-primary);">Journal</h2>
+                        <button class="btn btn-primary" id="newThoughtBtn">➕ New Thought</button>
                     </div>
 
-                    <div id="thoughtsContainer" class="grid grid-1" style="gap: 1rem;">
-                        <!-- Thoughts will be loaded here -->
-                    </div>
+                    <div id="thoughtsContainer"></div>
 
                     <div id="emptyState" class="empty-state hidden">
                         <div class="empty-state-icon">💭</div>
                         <div class="empty-state-title">No thoughts yet</div>
-                        <div class="empty-state-text">Start journaling!</div>
+                        <div class="empty-state-text">Start journaling — capture how you feel.</div>
+                        <button class="btn btn-primary"
+                            onclick="document.getElementById('newThoughtBtn').click()">
+                            Write First Thought
+                        </button>
                     </div>
                 </div>
 
-                <div>
-                    <div class="card">
-                        <h3 style="margin: 0 0 1rem 0;">Mood Summary (30 days)</h3>
+                <!-- Right: Mood summary -->
+                <div class="card" style="position:sticky;top:1rem;">
+                    <div class="card-header">
+                        <h3 class="card-title">Mood Summary (30 days)</h3>
+                    </div>
+                    <div class="card-content">
                         <div id="moodChart">
-                            <!-- Mood chart will be rendered here -->
+                            <p style="text-align:center;color:var(--text-tertiary);font-size:0.85rem;">No mood data yet</p>
                         </div>
                     </div>
                 </div>
+
             </div>
         </main>
     </div>
 
-    <!-- Thought Modal -->
+    <!-- ── Thought Modal ─────────────────────────────────────────────────── -->
     <div class="modal-overlay" id="thoughtModal">
         <div class="modal">
             <div class="modal-header">
                 <h2 class="modal-title" id="modalTitle">New Thought</h2>
                 <button class="modal-close">✕</button>
             </div>
+
             <form id="thoughtForm">
+                <!--
+                    NOTE: thoughtMood hidden input is kept for backwards compat
+                    but thoughts.js now tracks mood in a JS variable (selectedMood)
+                    so form.reset() cannot wipe it.
+                -->
+                <input type="hidden" id="thoughtMood" value="Neutral">
+
+                <!-- Mood picker -->
                 <div class="form-group">
                     <label class="form-label">How are you feeling?</label>
-                    <div class="mood-selector">
-                        <div class="mood-option" data-mood="Happy" title="Happy">😊</div>
-                        <div class="mood-option selected" data-mood="Neutral" title="Neutral">😐</div>
-                        <div class="mood-option" data-mood="Sad" title="Sad">😢</div>
-                        <div class="mood-option" data-mood="Anxious" title="Anxious">😰</div>
-                        <div class="mood-option" data-mood="Excited" title="Excited">🤩</div>
+                    <div style="display:flex;gap:0.75rem;justify-content:center;padding:0.5rem 0;">
+                        <button type="button" class="mood-option" data-mood="Happy"   title="Happy">😊</button>
+                        <button type="button" class="mood-option selected" data-mood="Neutral" title="Neutral">😐</button>
+                        <button type="button" class="mood-option" data-mood="Sad"     title="Sad">😢</button>
+                        <button type="button" class="mood-option" data-mood="Anxious" title="Anxious">😰</button>
+                        <button type="button" class="mood-option" data-mood="Excited" title="Excited">🤩</button>
                     </div>
-                    <input type="hidden" id="thoughtMood" value="Neutral">
                 </div>
 
+                <!-- Content -->
                 <div class="form-group">
-                    <label class="form-label">What's on your mind?</label>
-                    <textarea id="thoughtContent" class="form-textarea" rows="8" required 
-                              placeholder="Write freely..."></textarea>
+                    <label class="form-label">What's on your mind? *</label>
+                    <textarea id="thoughtContent" class="form-textarea" rows="6"
+                        placeholder="Write freely…" required></textarea>
                 </div>
 
+                <!-- Tags -->
                 <div class="form-group">
                     <label class="form-label">Tags (comma separated)</label>
-                    <input type="text" id="thoughtTags" class="form-input" placeholder="work, personal, ideas">
+                    <input type="text" id="thoughtTags" class="form-input"
+                        placeholder="work, personal, ideas">
                 </div>
 
+                <!-- Private toggle -->
                 <div class="form-group">
-                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
                         <input type="checkbox" id="thoughtPrivate" checked>
-                        <span>🔒 Private (only you can see this)</span>
+                        🔒 Private (only you can see this)
                     </label>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary modal-close">Cancel</button>
+                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('thoughtModal').classList.remove('active')">Cancel</button>
                     <button type="button" class="btn btn-danger hidden" id="deleteThoughtBtn">Delete</button>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>

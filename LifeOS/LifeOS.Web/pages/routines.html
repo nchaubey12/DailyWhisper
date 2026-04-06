@@ -40,6 +40,18 @@
                     <span class="nav-icon">💭</span>
                     <span>Thoughts</span>
                 </a>
+                <a href="learning.html" class="nav-item" data-page="learning.html">
+                    <span class="nav-icon">📖</span>
+                    <span>Learning</span>
+                </a>
+                <a href="achievements.html" class="nav-item">
+                    <span class="nav-icon">🏆</span>
+                    <span>Achievements</span>
+                </a>
+                <a href="profile.html" class="nav-item" data-page="profile.html">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Profile</span>
+                </a>
             </nav>
         </aside>
 
@@ -120,7 +132,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary modal-close">Cancel</button>
+                    <button type="button" onclick="document.getElementById('routineModal').classList.remove('active')" style="padding:0.4rem 0.9rem;font-size:0.85rem;font-weight:500;background:var(--bg-tertiary);color:var(--text-primary);border:1.5px solid var(--border-color);border-radius:8px;cursor:pointer;">Cancel</button>
                     <button type="button" class="btn btn-danger hidden" id="deleteRoutineBtn">Delete</button>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>

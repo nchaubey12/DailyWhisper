@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achievements - LifeOS</title>
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/themes.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/cute-themes.css">
+    <link rel="stylesheet" href="../css/advanced-themes.css">
+    <style>
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .achievement-card {
+            background: var(--bg-secondary);
+            border: 3px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .achievement-card.unlocked {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        .achievement-card.locked {
+            opacity: 0.4;
+            filter: grayscale(1);
+        }
+
+        .achievement-card:not(.locked):hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+        }
+
+        .achievement-badge {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .achievement-tier {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .tier-bronze {
+            background: linear-gradient(135deg, #cd7f32, #b87333);
+            color: white;
+        }
+
+        .tier-silver {
+            background: linear-gradient(135deg, #c0c0c0, #a8a8a8);
+            color: white;
+        }
+
+        .tier-gold {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #333;
+        }
+
+        .tier-platinum {
+            background: linear-gradient(135deg, #e5e4e2, #b4b4b4);
+            color: #333;
+        }
+
+        .progress-ring {
+            width: 200px;
+            height: 200px;
+            margin: 2rem auto;
+            position: relative;
+        }
+
+        .progress-ring circle {
+            fill: none;
+            stroke-width: 12;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: var(--bg-tertiary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">LifeOS</div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="notes.html" class="nav-item">
+                    <span class="nav-icon">📝</span>
+                    <span>Notes</span>
+                </a>
+                <a href="goals.html" class="nav-item">
+                    <span class="nav-icon">🎯</span>
+                    <span>Goals</span>
+                </a>
+                <a href="deadlines.html" class="nav-item">
+                    <span class="nav-icon">⏰</span>
+                    <span>Deadlines</span>
+                </a>
+                <a href="routines.html" class="nav-item">
+                    <span class="nav-icon">🔁</span>
+                    <span>Routines</span>
+                </a>
+                <a href="thoughts.html" class="nav-item">
+                    <span class="nav-icon">💭</span>
+                    <span>Thoughts</span>
+                </a>
+                <a href="learning.html" class="nav-item">
+                    <span class="nav-icon">📖</span>
+                    <span>Learning</span>
+                </a>
+                <a href="achievements.html" class="nav-item">
+                    <span class="nav-icon">🏆</span>
+                    <span>Achievements</span>
+                </a>
+                <a href="profile.html" class="nav-item">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Profile</span>
+                </a>
+            </nav>
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menuToggle">☰</button>
+                <h1 class="page-title">🏆 Achievements</h1>
+            </div>
+            <div class="topbar-right">
+                <button class="topbar-icon" id="themeToggle">🌙</button>
+                <div class="user-menu" id="logoutBtn">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <span class="user-name" id="userName">User</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Progress Overview -->
+            <div class="card" style="margin-bottom: 2rem;">
+                <h2 style="text-align: center; margin-bottom: 1rem;">Your Progress</h2>
+                
+                <div class="progress-ring">
+                    <svg width="200" height="200">
+                        <circle cx="100" cy="100" r="90" stroke="var(--bg-tertiary)" stroke-width="12"/>
+                        <circle id="progressCircle" cx="100" cy="100" r="90" 
+                                stroke="var(--primary-color)" 
+                                stroke-dasharray="565.48" 
+                                stroke-dashoffset="565.48"/>
+                    </svg>
+                    <div class="progress-text" id="progressText">0%</div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="unlockedCount">0</div>
+                        <div class="stat-label">Unlocked</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalCount">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="bronzeCount">0</div>
+                        <div class="stat-label">🥉 Bronze</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="silverCount">0</div>
+                        <div class="stat-label">🥈 Silver</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="goldCount">0</div>
+                        <div class="stat-label">🥇 Gold</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="platinumCount">0</div>
+                        <div class="stat-label">💎 Platinum</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Achievement Categories -->
+            <div style="margin-bottom: 2rem;">
+                <h2>All Achievements</h2>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem;">
+                    <button class="btn btn-sm btn-secondary filter-btn active" data-filter="all">All</button>
+                    <button class="btn btn-sm btn-secondary filter-btn" data-filter="unlocked">Unlocked</button>
+                    <button class="btn btn-sm btn-secondary filter-btn" data-filter="locked">Locked</button>
+                    <button class="btn btn-sm btn-secondary filter-btn" data-filter="bronze">Bronze</button>
+                    <button class="btn btn-sm btn-secondary filter-btn" data-filter="silver">Silver</button>
+                    <button class="btn btn-sm btn-secondary filter-btn" data-filter="gold">Gold</button>
+                    <button class="btn btn-sm btn-secondary filter-btn" data-filter="platinum">Platinum</button>
+                </div>
+            </div>
+
+            <!-- Achievements Grid -->
+            <div class="achievements-grid" id="achievementsGrid">
+                <!-- Achievements will be loaded here -->
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="../js/achievements-page.js"></script>
+</body>
+</html>

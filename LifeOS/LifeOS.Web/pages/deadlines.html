@@ -8,42 +8,50 @@
     <link rel="stylesheet" href="../css/themes.css">
     <link rel="stylesheet" href="../css/layout.css">
     <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/cute-themes.css">
+<link rel="stylesheet" href="../css/advanced-themes.css">
     <style>
         .calendar {
             background: var(--bg-secondary);
             border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.25rem;
+            width: 100%;
         }
         .calendar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .calendar-header h2 {
+            font-size: 1rem !important;
         }
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 0.5rem;
+            gap: 3px;
         }
         .calendar-day-header {
             text-align: center;
             font-weight: 600;
-            padding: 0.5rem;
+            padding: 0.25rem 0;
+            font-size: 0.7rem;
             color: var(--text-secondary);
         }
         .calendar-day {
-            aspect-ratio: 1;
+            height: 48px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 0.5rem;
-            border-radius: 8px;
+            padding: 0.2rem;
+            border-radius: 6px;
             background: var(--bg-primary);
             cursor: pointer;
             transition: all 0.2s;
             position: relative;
+            font-size: 0.78rem;
         }
         .calendar-day:hover {
             background: var(--bg-tertiary);
@@ -106,6 +114,18 @@
                     <span class="nav-icon">💭</span>
                     <span>Thoughts</span>
                 </a>
+                <a href="learning.html" class="nav-item" data-page="learning.html">
+                    <span class="nav-icon">📖</span>
+                    <span>Learning</span>
+                </a>
+                <a href="achievements.html" class="nav-item">
+                    <span class="nav-icon">🏆</span>
+                    <span>Achievements</span>
+                </a>
+                <a href="profile.html" class="nav-item" data-page="profile.html">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Profile</span>
+                </a>
             </nav>
         </aside>
 
@@ -118,6 +138,10 @@
             </div>
             <div class="topbar-right">
                 <button class="topbar-icon" id="themeToggle">🌙</button>
+                <button class="btn btn-primary btn-sm" id="newDeadlineBtn" style="margin-right:0.5rem;">
+                    <span>➕</span>
+                    <span>New Deadline</span>
+                </button>
                 <div class="user-menu" id="logoutBtn">
                     <div class="user-avatar" id="userAvatar">U</div>
                     <span class="user-name" id="userName">User</span>
@@ -140,10 +164,6 @@
 
             <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
                 <h2 style="margin: 0;">All Deadlines</h2>
-                <button class="btn btn-primary" id="newDeadlineBtn">
-                    <span>➕</span>
-                    <span>New Deadline</span>
-                </button>
             </div>
 
             <div id="deadlinesContainer">
@@ -208,7 +228,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary modal-close">Cancel</button>
+                    <button type="button" class="btn btn-secondary btn-cancel-modal" onclick="document.getElementById('deadlineModal').classList.remove('active')">Cancel</button>
                     <button type="button" class="btn btn-danger hidden" id="deleteDeadlineBtn">Delete</button>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
